@@ -1,9 +1,5 @@
 package snbt
 
-import (
-	"fmt"
-)
-
 type tokenType int
 
 const (
@@ -17,16 +13,16 @@ const (
 	tkMapEnd
 )
 
-var displayTokenType = []string{
-	"ILL",
-	"STR",
-	"INT",
-	"FLO",
-	"ARRS",
-	"ARRE",
-	"MAPS",
-	"MAPE",
-}
+// var displayTokenType = []string{
+// 	"ILL",
+// 	"STR",
+// 	"INT",
+// 	"FLO",
+// 	"ARRS",
+// 	"ARRE",
+// 	"MAPS",
+// 	"MAPE",
+// }
 
 var endSigBytes = []byte{
 	':',
@@ -63,9 +59,9 @@ type token struct {
 	v interface{}
 }
 
-func (t token) string() string {
-	if t.v == nil {
-		return displayTokenType[t.t]
-	}
-	return fmt.Sprintf("%s:%v", displayTokenType[t.t], t.v)
-}
+// func (t token) string() string {
+// 	if t.v == nil {
+// 		return displayTokenType[t.t]
+// 	}
+// 	return fmt.Sprintf("%s:%v", displayTokenType[t.t], t.v)
+// }

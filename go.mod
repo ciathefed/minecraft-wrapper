@@ -1,6 +1,6 @@
 module github.com/ciathefed/minecraft-wrapper
 
-go 1.12
+go 1.23
 
 require (
 	github.com/looplab/fsm v1.0.2
