@@ -536,7 +536,11 @@ func (w *Wrapper) Stop() error {
 	if err := w.console.WriteCmd("stop"); err != nil {
 		return err
 	}
-	go w.console.Stop()
+	go func() {
+		w.console.Stop()
+		w.machine.SetState(WrapperOffline)
+		w.ctxCancelFunc()
+	}()
 
 	return nil
 }
