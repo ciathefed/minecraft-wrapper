@@ -63,9 +63,9 @@ func (j *defaultJavaExec) Kill() error {
 	return j.cmd.Process.Kill()
 }
 
-func javaExecCmd(serverPath string, initialHeapSize, maxHeapSize int) *defaultJavaExec {
-	initialHeapFlag := fmt.Sprintf("-Xms%dM", initialHeapSize)
-	maxHeapFlag := fmt.Sprintf("-Xmx%dM", maxHeapSize)
+func javaExecCmd(serverPath string, initialHeapSize string, maxHeapSize string) *defaultJavaExec {
+	initialHeapFlag := fmt.Sprintf("-Xms%s", initialHeapSize)
+	maxHeapFlag := fmt.Sprintf("-Xmx%s", maxHeapSize)
 	cmd := exec.Command("java", initialHeapFlag, maxHeapFlag, "-jar", serverPath, "nogui")
 	return &defaultJavaExec{cmd: cmd, done: make(chan error, 1)}
 }

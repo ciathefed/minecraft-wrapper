@@ -96,7 +96,7 @@ type Wrapper struct {
 // NewDefaultWrapper returns a new instance of the Wrapper. This is
 // the main method to use for your wrapper but if you wish to read
 // and parse your own log lines to events, see 'NewWrapper'. This
-func NewDefaultWrapper(server string, initial, max int) (*Wrapper, error) {
+func NewDefaultWrapper(server string, initial string, max string) (*Wrapper, error) {
 	_, err := os.Stat(server)
 	if err != nil {
 		return nil, err

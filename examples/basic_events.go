@@ -19,7 +19,7 @@ func main() {
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)
 
-	wpr, err := wrapper.NewDefaultWrapper("server.jar", 1024, 1024)
+	wpr, err := wrapper.NewDefaultWrapper("server.jar", "1024M", "1024M")
 	if err != nil {
 		log.Fatalf("failed to create wrapper: %v", err)
 	}

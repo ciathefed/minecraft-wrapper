@@ -1,7 +1,7 @@
 # minecraft-wrapper
 
 <p align="center">
-  <img src="https://github.com/ciathefed/minecraft-wrapper/blob/master/assets/minecraft-gopher.png?raw=true" alt="Minecraft Gopher"/>
+  <img src="https://github.com/ciathefed/minecraft-wrapper/blob/main/assets/minecraft-gopher.png?raw=true" alt="Minecraft Gopher"/>
 </p>
 
 [![GoDoc](https://godoc.org/github.com/ciathefed/minecraft-wrapper?status.svg)](https://godoc.org/github.com/ciathefed/minecraft-wrapper)
@@ -22,7 +22,7 @@ go get github.com/ciathefed/minecraft-wrapper
 - Starting the server and listening to game events:
 
 ```go
-wpr := wrapper.NewDefaultWrapper("server.jar", 1024, 1024)
+wpr := wrapper.NewDefaultWrapper("server.jar", "1024M", "1024M")
 wpr.Start()
 defer wpr.Stop()
 
@@ -38,7 +38,7 @@ for {
 - Broadcast a `"Hello"` message once the server is loaded:
 
 ```go
-wpr := wrapper.NewDefaultWrapper("server.jar", 1024, 1024)
+wpr := wrapper.NewDefaultWrapper("server.jar", "1024M", "1024M")
 wpr.Start()
 defer wpr.Stop()
 
@@ -59,7 +59,7 @@ fmt.Println(out.Pos) // [POS_X, POS_Y, POS_Z]
 - Save the game and `Tell` a game admin `"admin-player"`, when the server is overloading.
 
 ```go
-wpr := wrapper.NewDefaultWrapper("server.jar", 1024, 1024)
+wpr := wrapper.NewDefaultWrapper("server.jar", "1024M", "1024M")
 wpr.Start()
 defer wpr.Stop()
 <-wpr.Loaded()
