@@ -7,7 +7,6 @@ import (
 
 type Console interface {
 	Start() error
-	Stop() error
 	Kill() error
 	WriteCmd(string) error
 	ReadLine() (string, error)
@@ -31,10 +30,6 @@ func newConsole(cmd JavaExec) *defaultConsole {
 
 func (c *defaultConsole) Start() error {
 	return c.cmd.Start()
-}
-
-func (c *defaultConsole) Stop() error {
-	return c.cmd.Stop()
 }
 
 func (c *defaultConsole) Kill() error {

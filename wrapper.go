@@ -527,7 +527,7 @@ func (w *Wrapper) State() string {
 	return w.machine.Current()
 }
 
-// Stop pipes a 'stop' command to the minecraft java process.
+// Stop pipes a 'stop' command to the minecraft java process peacefully.
 func (w *Wrapper) Stop() error {
 	if !w.machine.Is(WrapperOnline) {
 		return ErrWrapperNotOnline
@@ -536,13 +536,23 @@ func (w *Wrapper) Stop() error {
 	if err := w.console.WriteCmd("stop"); err != nil {
 		return err
 	}
-	go func() {
-		w.console.Stop()
-		w.machine.SetState(WrapperOffline)
-		w.ctxCancelFunc()
-	}()
 
-	return nil
+	timeout := 30 * time.Second
+	ticker := time.NewTicker(500 * time.Millisecond)
+	defer ticker.Stop()
+
+	timeoutChan := time.After(timeout)
+
+	for {
+		select {
+		case <-ticker.C:
+			if w.State() == "offline" {
+				return nil
+			}
+		case <-timeoutChan:
+			return fmt.Errorf("timeout waiting for server to stop")
+		}
+	}
 }
 
 // Tell sends a message to a specific target in the server.

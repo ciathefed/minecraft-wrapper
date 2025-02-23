@@ -4,15 +4,12 @@ import (
 	"fmt"
 	"io"
 	"os/exec"
-	"syscall"
-	"time"
 )
 
 type JavaExec interface {
 	Stdout() io.ReadCloser
 	Stdin() io.WriteCloser
 	Start() error
-	Stop() error
 	Kill() error
 }
 
@@ -41,22 +38,6 @@ func (j *defaultJavaExec) Start() error {
 	}()
 
 	return nil
-}
-
-func (j *defaultJavaExec) Stop() error {
-	if j.cmd.Process == nil {
-		return fmt.Errorf("server not running")
-	}
-
-	select {
-	case <-j.done:
-		return nil
-	case <-time.After(10 * time.Second):
-		if err := j.cmd.Process.Signal(syscall.SIGTERM); err != nil {
-			return err
-		}
-		return j.Kill()
-	}
 }
 
 func (j *defaultJavaExec) Kill() error {
