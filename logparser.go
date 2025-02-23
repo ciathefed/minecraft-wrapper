@@ -1,7 +1,6 @@
 package wrapper
 
 import (
-	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
@@ -25,17 +24,6 @@ type logLine struct {
 }
 
 var logRegex = regexp.MustCompile(`\[([0-9:]*)\] \[([A-z(-| )#0-9]*)\/([A-z #]*)\]: (.*)`)
-
-// func SetLogRegex(value string) {
-// 	switch value {
-// 	case "VANILLA":
-// 		logRegex = regexp.MustCompile(`\[([0-9:]*)\] \[([A-z(-| )#0-9]*)\/([A-z #]*)\]: (.*)`)
-// 	case "FABRIC":
-// 		logRegex = regexp.MustCompile(`\[([0-9:]*)\] \[([^\/]+)\/(\w+)\]: (.*)`)
-// 	default:
-// 		logRegex = regexp.MustCompile(value)
-// 	}
-// }
 
 func parseToLogLine(line string) *logLine {
 	matches := logRegex.FindAllStringSubmatch(line, 4)
@@ -105,7 +93,6 @@ func registerGameEvent(ev string) {
 
 func logParserFunc(line string, tick int) (events.Event, events.EventType) {
 	ll := parseToLogLine(line)
-	fmt.Printf("%#v\n", ll)
 	if ll.output == "" {
 		return events.NilEvent, events.TypeNil
 	}
