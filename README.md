@@ -106,6 +106,7 @@ The following apis/commands are from the official minecraft gamepedia [list of c
 - [ ] [DataModify](https://minecraft.gamepedia.com/Commands/data#modify)
 - [ ] [DataRemove](https://minecraft.gamepedia.com/Commands/data#remove)
 - [x] [DefaultGameMode](https://minecraft.gamepedia.com/Commands/defaultgamemode)
+- [x] [Op](https://minecraft.gamepedia.com/Commands/op)
 - [x] [DeOp](https://minecraft.gamepedia.com/Commands/deop)
 - [x] [Difficulty](https://minecraft.gamepedia.com/Commands/difficulty)
 - [ ] [Effect](https://minecraft.gamepedia.com/Commands/effect)

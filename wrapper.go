@@ -339,6 +339,11 @@ func (w *Wrapper) DefaultGameMode(mode GameMode) error {
 	return w.writeToConsole(cmd)
 }
 
+// Op adds the given player to the operator list.
+func (w *Wrapper) Op(player string) error {
+	return w.writeToConsole("op " + player)
+}
+
 // DeOp removes a given player from the operator list.
 func (w *Wrapper) DeOp(player string) error {
 	return w.writeToConsole("deop " + player)

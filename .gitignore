@@ -18,6 +18,8 @@
 # vendor/
 
 # Minecraft related files
+examples/*
+!examples/basic_events.go
 logs
 server
 server.properties
