@@ -1,12 +1,15 @@
 package wrapper
 
 import (
+	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
 
 	"github.com/ciathefed/minecraft-wrapper/events"
 )
+
+var PrintLogMessages = false
 
 // LogParser is an interface func to decode any server log line
 // to its respective event type. The returned events must be either:
@@ -92,6 +95,9 @@ func registerGameEvent(ev string) {
 }
 
 func logParserFunc(line string, tick int) (events.Event, events.EventType) {
+	if PrintLogMessages {
+		fmt.Println(line)
+	}
 	ll := parseToLogLine(line)
 	if ll.output == "" {
 		return events.NilEvent, events.TypeNil
