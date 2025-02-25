@@ -96,7 +96,7 @@ func registerGameEvent(ev string) {
 
 func logParserFunc(line string, tick int) (events.Event, events.EventType) {
 	if PrintLogMessages {
-		fmt.Println(line)
+		fmt.Print(line)
 	}
 	ll := parseToLogLine(line)
 	if ll.output == "" {
