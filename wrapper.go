@@ -211,7 +211,7 @@ func (w *Wrapper) handleGameEvent(ev events.GameEvent) {
 	}
 }
 
-func (w *Wrapper) writeToConsole(cmd string) error {
+func (w *Wrapper) WriteToConsole(cmd string) error {
 	if !w.machine.Is(WrapperOnline) {
 		return ErrWrapperNotOnline
 	}
@@ -226,7 +226,7 @@ func (w *Wrapper) processClock(ctx context.Context) {
 			return
 		case <-w.clock.requestSync():
 			w.clock.resetLastSync()
-			w.writeToConsole("time query daytime")
+			w.WriteToConsole("time query daytime")
 		}
 	}
 }
@@ -251,7 +251,7 @@ func (w *Wrapper) processCmdToEvent(cmd string, timeout time.Duration, evs ...st
 		Chan: reflect.ValueOf(time.After(timeout)),
 	}
 
-	if err := w.writeToConsole(cmd); err != nil {
+	if err := w.WriteToConsole(cmd); err != nil {
 		return events.NilGameEvent, err
 	}
 
@@ -273,7 +273,7 @@ func (w *Wrapper) processCmdToEvent(cmd string, timeout time.Duration, evs ...st
 func (w *Wrapper) processCmdToEventArr(cmd string, timeout time.Duration, ev string) ([]events.GameEvent, error) {
 	registerGameEvent(ev)
 	evChan := w.eq.get(ev)
-	if err := w.writeToConsole(cmd); err != nil {
+	if err := w.WriteToConsole(cmd); err != nil {
 		return nil, err
 	}
 
@@ -304,13 +304,13 @@ func (w *Wrapper) processCmdToEventArr(cmd string, timeout time.Duration, ev str
 
 func (w *Wrapper) Ban(player, reason string) error {
 	cmd := strings.Join([]string{"ban", player, reason}, " ")
-	return w.writeToConsole(cmd)
+	return w.WriteToConsole(cmd)
 }
 
 // BanIP adds the input IP address to the servers blacklisted IPs list.
 func (w *Wrapper) BanIP(ip, reason string) error {
 	cmd := strings.Join([]string{"ban-ip", ip, reason}, " ")
-	return w.writeToConsole(cmd)
+	return w.WriteToConsole(cmd)
 }
 
 func (w *Wrapper) BanList(t BanListType) ([]string, error) {
@@ -346,17 +346,17 @@ func (w *Wrapper) DataGet(t, id string) (*DataGetOutput, error) {
 // DefaultGameMode sets the default game mode for new players joining.
 func (w *Wrapper) DefaultGameMode(mode GameMode) error {
 	cmd := fmt.Sprintf("defaultgamemode %s", mode)
-	return w.writeToConsole(cmd)
+	return w.WriteToConsole(cmd)
 }
 
 // Op adds the given player to the operator list.
 func (w *Wrapper) Op(player string) error {
-	return w.writeToConsole("op " + player)
+	return w.WriteToConsole("op " + player)
 }
 
 // DeOp removes a given player from the operator list.
 func (w *Wrapper) DeOp(player string) error {
-	return w.writeToConsole("deop " + player)
+	return w.WriteToConsole("deop " + player)
 }
 
 // Difficulty changes the game difficulty level of the world.
@@ -398,7 +398,7 @@ func (w *Wrapper) ExperienceQuery(target string, xpType ExperienceType) (int, er
 
 // ForceLoadAll removes the constant force loads on all chunks in the dimension.
 func (w *Wrapper) ForceLoadRemoveAll() error {
-	return w.writeToConsole("forceload remove all")
+	return w.WriteToConsole("forceload remove all")
 }
 
 // GameEvents returns a receive-only channel of game related event. For example:
@@ -476,7 +476,7 @@ func (w *Wrapper) Loaded() <-chan bool {
 
 // Reload reloads the server datapack.
 func (w *Wrapper) Reload() error {
-	return w.writeToConsole("reload")
+	return w.WriteToConsole("reload")
 }
 
 // SaveAll marks all chunks and player data to be saved to the data storage device.
@@ -486,22 +486,22 @@ func (w *Wrapper) SaveAll(flush bool) error {
 	if flush {
 		cmd += " flush"
 	}
-	return w.writeToConsole(cmd)
+	return w.WriteToConsole(cmd)
 }
 
 // SaveOn enables automatic saving. The server is allowed to write to the world files.
 func (w *Wrapper) SaveOn() error {
-	return w.writeToConsole("save-on")
+	return w.WriteToConsole("save-on")
 }
 
 // SaveOff disables automatic saving by preventing the server from writing to the world files.
 func (w *Wrapper) SaveOff() error {
-	return w.writeToConsole("save-off")
+	return w.WriteToConsole("save-off")
 }
 
 // Say sends the given message in the minecraft in-game chat.
 func (w *Wrapper) Say(msg string) error {
-	return w.writeToConsole("say " + msg)
+	return w.WriteToConsole("say " + msg)
 }
 
 // Seed returns the world seed.
@@ -519,7 +519,7 @@ func (w *Wrapper) Seed() (int, error) {
 // SetIdleTimeout sets the default timeout in minutes after which idle players
 // are kicked out of the server.
 func (w *Wrapper) SetIdleTimeout(minutes uint32) error {
-	return w.writeToConsole(fmt.Sprintf("setidletimeout %d", minutes))
+	return w.WriteToConsole(fmt.Sprintf("setidletimeout %d", minutes))
 }
 
 // Start will initialize the minecraft java process and start
