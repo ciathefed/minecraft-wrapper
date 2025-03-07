@@ -81,16 +81,17 @@ type Wrapper struct {
 	// Version is the minecraft server version being wrapped.
 	// The Version is detected and set from the log line:
 	// "Starting minecraft server version [X.X.X]""
-	Version        string
-	machine        *fsm.FSM
-	console        Console
-	parser         LogParser
-	clock          *clock
-	eq             *eventsQueue
-	playerList     map[string]string
-	ctxCancelFunc  context.CancelFunc
-	gameEventsChan chan (events.GameEvent)
-	loadedChan     chan bool
+	Version         string
+	machine         *fsm.FSM
+	console         Console
+	parser          LogParser
+	clock           *clock
+	eq              *eventsQueue
+	playerList      map[string]string
+	ctxCancelFunc   context.CancelFunc
+	gameEventsChan  chan (events.GameEvent)
+	consoleLogsChan chan (string)
+	loadedChan      chan bool
 }
 
 // NewDefaultWrapper returns a new instance of the Wrapper. This is
@@ -109,17 +110,22 @@ func NewDefaultWrapper(server string, initial string, max string) (*Wrapper, err
 
 func NewWrapper(c Console, p LogParser) *Wrapper {
 	wpr := &Wrapper{
-		console:        c,
-		parser:         p,
-		clock:          newClock(),
-		eq:             newEventsQueue(),
-		playerList:     map[string]string{},
-		ctxCancelFunc:  func() {},
-		gameEventsChan: make(chan events.GameEvent, 10),
-		loadedChan:     make(chan bool, 1),
+		console:         c,
+		parser:          p,
+		clock:           newClock(),
+		eq:              newEventsQueue(),
+		playerList:      map[string]string{},
+		ctxCancelFunc:   func() {},
+		gameEventsChan:  make(chan events.GameEvent, 10),
+		consoleLogsChan: nil,
+		loadedChan:      make(chan bool, 1),
 	}
 	wpr.newFSM()
 	return wpr
+}
+
+func (w *Wrapper) SetConsoleLogsChan(ch chan string) {
+	w.consoleLogsChan = ch
 }
 
 func (w *Wrapper) newFSM() {
@@ -152,6 +158,10 @@ func (w *Wrapper) processLogEvents(ctx context.Context) {
 			if err == io.EOF {
 				w.updateState(events.StoppedEvent)
 				return
+			}
+
+			if w.consoleLogsChan != nil {
+				w.consoleLogsChan <- line
 			}
 
 			ev, t := w.parseLineToEvent(line)
@@ -397,6 +407,10 @@ func (w *Wrapper) ForceLoadRemoveAll() error {
 // - Player sends messages...
 func (w *Wrapper) GameEvents() <-chan events.GameEvent {
 	return w.gameEventsChan
+}
+
+func (w *Wrapper) ConsoleLogs() <-chan string {
+	return w.consoleLogsChan
 }
 
 // Give give a target player entity some given items.

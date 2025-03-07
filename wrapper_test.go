@@ -66,3 +66,37 @@ func TestWrapperOffline(t *testing.T) {
 		t.Error("wrapper.BanList should error when 'offline'")
 	}
 }
+
+func TestWrapperConsoleLogsChan(t *testing.T) {
+	c, err := newTestConsole("testdata/server_start_log")
+	if err != nil {
+		t.Errorf("failed to load test file: %v", err)
+		return
+	}
+
+	wpr := NewWrapper(c, logParserFunc)
+	if wpr.State() != WrapperOffline {
+		t.Errorf("wrapper should be 'offline', got %s", wpr.State())
+	}
+
+	consoleLogsChan := make(chan string, 1024)
+	defer close(consoleLogsChan)
+	wpr.SetConsoleLogsChan(consoleLogsChan)
+
+	go func() {
+		for range consoleLogsChan {
+
+		}
+	}()
+
+	if err := wpr.Start(); err != nil {
+		t.Error(err)
+		return
+	}
+
+	select {
+	case <-wpr.Loaded():
+	case <-time.After(30 * time.Second):
+		t.Error("wrapper timeout, failed to start")
+	}
+}
